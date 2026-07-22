@@ -178,10 +178,10 @@ If any inline source yields cookies, Sweet Cookie returns that result immediatel
   - On macOS, the default `chrome` backend checks Google Chrome and Brave roots. `chromiumBrowser` can pin `chrome`, `brave`, `arc`, or `chromium`.
   - On Linux/Windows, Brave and other Chromium-family profiles work when you pass an explicit `chromeProfile` path to that profile or `Cookies` DB.
   - Other Chromium browsers typically work by passing `chromeProfile` as an explicit `Cookies` DB path.
-  - Only supports modern Chromium cookie DB schemas (roughly Chrome `>=100`).
+  - Requires a modern Chromium cookie DB schema with partition-provenance columns.
 - `edge` (Chromium-based): macOS / Windows / Linux
   - Default discovery targets Microsoft Edge paths.
-  - Only supports modern Chromium cookie DB schemas (roughly Edge/Chrome `>=100`).
+  - Requires a modern Chromium cookie DB schema with partition-provenance columns.
 - `firefox`: macOS / Windows / Linux
 - `safari`: macOS only (reads `Cookies.binarycookies`)
 
@@ -218,6 +218,12 @@ Sweet Cookie accepts either a plain `Cookie[]` or `{ cookies: Cookie[] }`.
 The extension export format is documented in `docs/spec.md`.
 
 `inlineCookiesFile` accepts a file path. Paths ending in `.json` or `.base64` are treated as files first, then parsed as JSON/base64 payloads.
+
+## Cookie scope and isolation
+
+Returned cookies preserve `hostOnly`: host-only cookies match exactly one hostname, while domain cookies may match subdomains. Scope is also part of deduplication, so host-only and domain cookies with the same name, normalized domain, and path remain distinct.
+
+Sweet Cookie excludes Chromium partitioned cookies and Firefox partitioned or container-scoped cookies from local database reads because an ordinary replay cannot preserve their isolation context. Inline payloads carrying partition or container provenance are rejected with a warning for the same reason.
 
 ## Chromium v20 App-Bound Encryption
 

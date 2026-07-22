@@ -1,7 +1,40 @@
 {
-	"name": "sweet-cookie",
+	"name": "@steipete/sweet-cookie",
+	"version": "0.4.0",
 	"private": true,
+	"description": "Inline-first browser cookie extraction for local tooling (no native addons).",
+	"homepage": "https://github.com/CCLRTE/sweet-cookie#readme",
+	"bugs": {
+		"url": "https://github.com/CCLRTE/sweet-cookie/issues"
+	},
+	"license": "MIT",
+	"author": "Peter Steinberger",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CCLRTE/sweet-cookie.git"
+	},
+	"bin": {
+		"sweet-cookie": "packages/core/dist/cli.js"
+	},
+	"files": [
+		"packages/core/dist",
+		"packages/core/LICENSE",
+		"packages/core/README.md",
+		"README.md"
+	],
 	"type": "module",
+	"main": "packages/core/dist/index.js",
+	"types": "packages/core/dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./packages/core/dist/index.d.ts",
+			"import": "./packages/core/dist/index.js"
+		},
+		"./cli": {
+			"types": "./packages/core/dist/cli.d.ts",
+			"import": "./packages/core/dist/cli.js"
+		}
+	},
 	"scripts": {
 		"build": "pnpm -r build",
 		"check": "pnpm format:check && pnpm typecheck && pnpm lint",

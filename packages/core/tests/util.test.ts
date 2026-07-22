@@ -56,6 +56,11 @@ describe("util", () => {
 		expect(hostMatchesCookieDomain("example.com", "chatgpt.com")).toBe(false);
 	});
 
+	it("hostMatchesCookieDomain() requires exact matches for host-only cookies", () => {
+		expect(hostMatchesCookieDomain("chatgpt.com", "chatgpt.com", true)).toBe(true);
+		expect(hostMatchesCookieDomain("a.chatgpt.com", "chatgpt.com", true)).toBe(false);
+	});
+
 	it("tryDecodeBase64Json() decodes base64 strings", () => {
 		const input = JSON.stringify({ ok: true });
 		const base64 = Buffer.from(input, "utf8").toString("base64");

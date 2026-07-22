@@ -22,6 +22,73 @@ describe("inline provider", () => {
 		expect(res.cookies.map((c) => c.name)).toEqual(["sid"]);
 	});
 
+	it("does not send host-only cookies to subdomains", async () => {
+		const payload = {
+			cookies: [
+				{
+					name: "host-only",
+					value: "a",
+					domain: "chatgpt.com",
+					hostOnly: true,
+					path: "/",
+				},
+				{
+					name: "domain",
+					value: "b",
+					domain: "chatgpt.com",
+					hostOnly: false,
+					path: "/",
+				},
+			],
+		};
+		const res = await getCookiesFromInline(
+			{ source: "inline-json", payload: JSON.stringify(payload) },
+			["https://sub.chatgpt.com/"],
+			null,
+		);
+
+		expect(res.cookies.map((cookie) => cookie.name)).toEqual(["domain"]);
+	});
+
+	it("rejects inline cookies carrying partition or container provenance", async () => {
+		const payload = {
+			cookies: [
+				{ name: "plain", value: "a", domain: "chatgpt.com", path: "/" },
+				{
+					name: "chips",
+					value: "b",
+					domain: "chatgpt.com",
+					path: "/",
+					partitionKey: { topLevelSite: "https://example.com" },
+				},
+				{
+					name: "container",
+					value: "c",
+					domain: "chatgpt.com",
+					path: "/",
+					originAttributes: "^userContextId=2",
+				},
+				{
+					name: "partitioned-firefox",
+					value: "d",
+					domain: "chatgpt.com",
+					path: "/",
+					isPartitionedAttributeSet: 1,
+				},
+			],
+		};
+		const res = await getCookiesFromInline(
+			{ source: "inline-json", payload: JSON.stringify(payload) },
+			["https://chatgpt.com/"],
+			null,
+		);
+
+		expect(res.cookies.map((cookie) => cookie.name)).toEqual(["plain"]);
+		expect(res.warnings).toEqual([
+			"3 inline cookie(s) with partition or container provenance were excluded because replay cannot preserve their isolation context.",
+		]);
+	});
+
 	it("accepts base64 payloads", async () => {
 		const payload = { cookies: [{ name: "sid", value: "a", domain: "chatgpt.com", path: "/" }] };
 		const json = JSON.stringify(payload);
