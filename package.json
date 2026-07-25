@@ -3,15 +3,15 @@
 	"version": "0.4.0",
 	"private": true,
 	"description": "Inline-first browser cookie extraction for local tooling (no native addons).",
-	"homepage": "https://github.com/CCLRTE/sweet-cookie#readme",
+	"homepage": "https://github.com/hraness/sweet-cookie#readme",
 	"bugs": {
-		"url": "https://github.com/CCLRTE/sweet-cookie/issues"
+		"url": "https://github.com/hraness/sweet-cookie/issues"
 	},
 	"license": "MIT",
 	"author": "Peter Steinberger",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/CCLRTE/sweet-cookie.git"
+		"url": "git+https://github.com/hraness/sweet-cookie.git"
 	},
 	"bin": {
 		"sweet-cookie": "packages/core/dist/cli.js"
