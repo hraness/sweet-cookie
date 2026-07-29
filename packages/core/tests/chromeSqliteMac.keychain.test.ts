@@ -3,6 +3,17 @@ import { describe, expect, it, vi } from "vitest";
 const itIfDarwin = process.platform === "darwin" ? it : it.skip;
 
 describe("chrome sqlite (mac) keychain selection", () => {
+	it("binds a generic custom profile path to its explicit Chromium browser", async () => {
+		vi.resetModules();
+		const { resolveKeychainForDb } = await import("../src/providers/chromeSqliteMac.js");
+
+		expect(resolveKeychainForDb("/private/wrench-profile/Default/Cookies", "chromium")).toEqual({
+			account: "Chromium",
+			services: ["Chromium Safe Storage"],
+			label: "Chromium Safe Storage",
+		});
+	});
+
 	it("passes timeoutMs through to the Keychain lookup", async () => {
 		vi.resetModules();
 
