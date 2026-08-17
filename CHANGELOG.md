@@ -2,12 +2,16 @@
 
 ## Unreleased
 
+## 0.4.1 - 2026-08-01
+
 ### Changed
 
+- Update the pnpm, Vite, Oxfmt, Oxlint, and type-aware linting toolchain to their latest stable releases.
 - Update the repository toolchain to pnpm 11.12 and Node 22.13 or newer for current install hardening.
 
 ### Fixed
 
+- Preserve macOS Chromium permission-denied warnings during all-profile discovery so inaccessible profiles are distinguishable from missing databases. (`#37`, thanks `@bunizao`)
 - Avoid crashes and fail closed for opaque target URLs such as `file://`, preventing unrelated cookies from being returned. (`#32`, thanks `@devYRPauli`)
 
 ## 0.4.0 - 2026-06-11
