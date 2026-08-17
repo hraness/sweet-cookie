@@ -36,4 +36,25 @@ describe("extension cookie export", () => {
 
 		expect(exportedCookieKey(hostCookie, "0")).not.toBe(exportedCookieKey(domainCookie, "0"));
 	});
+
+	it("keeps scope as an independent key coordinate", () => {
+		for (const name of ["sid", "csrf"]) {
+			for (const domain of ["example.com", "sub.example.com"]) {
+				for (const path of ["/", "/account"]) {
+					for (const storeId of ["0", "profile-1"]) {
+						const shared = { domain, name, path, storeId };
+						const hostCookie = mapChromeCookie(chromeCookie({ ...shared, hostOnly: true }));
+						const domainCookie = mapChromeCookie(chromeCookie({ ...shared, hostOnly: false }));
+
+						expect(exportedCookieKey(hostCookie, storeId)).not.toBe(
+							exportedCookieKey(domainCookie, storeId),
+						);
+						expect(exportedCookieKey(hostCookie, storeId)).toBe(
+							exportedCookieKey({ ...hostCookie }, storeId),
+						);
+					}
+				}
+			}
+		}
+	});
 });
