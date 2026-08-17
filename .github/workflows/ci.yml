@@ -71,3 +71,23 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+  required:
+    name: Required
+    if: always()
+    needs: [check, test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every selected job
+        env:
+          CHECK: ${{ needs.check.result }}
+          TEST: ${{ needs.test.result }}
+        run: |
+          set -euo pipefail
+          for result in "$CHECK" "$TEST"; do
+            if [[ "$result" != success ]]; then
+              printf 'Unexpected required job result: %s\n' "$result"
+              exit 1
+            fi
+          done
