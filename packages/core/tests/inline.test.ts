@@ -89,6 +89,53 @@ describe("inline provider", () => {
 		]);
 	});
 
+	it("rejects every supported non-empty isolation marker and accepts empty markers", async () => {
+		const rejectedMarkers: Record<string, unknown>[] = [
+			{ partitionKey: {} },
+			{ partitionKey: "" },
+			{ top_frame_site_key: "https://top.example" },
+			{ originAttributes: "^userContextId=2" },
+			{ isPartitionedAttributeSet: 1 },
+			{ isPartitionedAttributeSet: "1" },
+			{ isPartitionedAttributeSet: true },
+		];
+		const acceptedMarkers: Record<string, unknown>[] = [
+			{},
+			{ partitionKey: null },
+			{ top_frame_site_key: "   " },
+			{ originAttributes: "" },
+			{ isPartitionedAttributeSet: 0 },
+			{ isPartitionedAttributeSet: "0" },
+			{ isPartitionedAttributeSet: false },
+		];
+		const cookie = (name: string, marker: Record<string, unknown>) => ({
+			name,
+			value: "value",
+			domain: "chatgpt.com",
+			path: "/",
+			...marker,
+		});
+		const payload = {
+			cookies: [
+				...rejectedMarkers.map((marker, index) => cookie(`rejected-${index}`, marker)),
+				...acceptedMarkers.map((marker, index) => cookie(`accepted-${index}`, marker)),
+			],
+		};
+
+		const res = await getCookiesFromInline(
+			{ source: "inline-json", payload: JSON.stringify(payload) },
+			["https://chatgpt.com/"],
+			null,
+		);
+
+		expect(res.cookies.map(({ name }) => name)).toEqual(
+			acceptedMarkers.map((_, index) => `accepted-${index}`),
+		);
+		expect(res.warnings).toEqual([
+			`${rejectedMarkers.length} inline cookie(s) with partition or container provenance were excluded because replay cannot preserve their isolation context.`,
+		]);
+	});
+
 	it("accepts base64 payloads", async () => {
 		const payload = { cookies: [{ name: "sid", value: "a", domain: "chatgpt.com", path: "/" }] };
 		const json = JSON.stringify(payload);
