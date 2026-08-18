@@ -12,14 +12,17 @@ Supports:
 Install:
 
 ```bash
-npm i @steipete/sweet-cookie
+npm i github:hraness/sweet-cookie#v0.4.2
 ```
+
+The upstream npm artifact `@steipete/sweet-cookie@0.4.1` is immutable historical evidence and
+does not contain the Hraness v0.4.2 safety fixes.
 
 CLI:
 
 ```bash
-npx @steipete/sweet-cookie github.com
-npx @steipete/sweet-cookie github.com --browser chrome --format header
+./node_modules/.bin/sweet-cookie github.com
+./node_modules/.bin/sweet-cookie github.com --browser chrome --format header
 ```
 
 Usage:

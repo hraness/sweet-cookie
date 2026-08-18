@@ -1,0 +1,18 @@
+{
+	"contract": "hraness.portfolio-inventory/v1",
+	"formatVersion": 1,
+	"repository": "hraness/sweet-cookie",
+	"components": [
+		{
+			"kind": "package",
+			"name": "@steipete/sweet-cookie",
+			"path": "packages/core",
+			"visibility": "public",
+			"version": "0.4.2"
+		}
+	],
+	"dependencies": [],
+	"deployments": [],
+	"brands": [],
+	"publications": []
+}

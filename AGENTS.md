@@ -8,10 +8,12 @@
 - `.agents/skills/` – reusable cross-repository KB and phased-execution workflows.
 - `WRITING.md` and `STYLE.md` – internal and public prose contracts.
 - `package.json`, `pnpm-workspace.yaml`, and `pnpm-lock.yaml` – the upstream-compatible pnpm workspace and frozen dependency graph.
+- `portfolio-inventory.json` – repository-owned public component metadata for the Hraness portfolio federation.
 
 # Guidelines
 
-- Keep this Hraness fork thin and upstream-rebase-friendly. Preserve the public `@steipete/sweet-cookie` identity, pnpm 11 command surface, directory shape, and existing release behavior.
+- Keep this Hraness fork thin and upstream-rebase-friendly. Preserve the public `@steipete/sweet-cookie` identity, pnpm 11 command surface, and directory shape. Release Hraness source only through immutable Git tags and GitHub Releases. Treat npm 0.4.1 as distinct historical upstream evidence, and do not publish to npm without separate authorization and verified package-owner access.
+- Keep the root shim, core manifest, and portfolio component name and version exact. Leave `publications` empty while the Hraness source is Git/GitHub-only.
 - Follow `WRITING.md` for internal prose and `STYLE.md` for public prose. Keep mandatory rules in the closest `AGENTS.md`, current procedures in `docs/`, executable contracts in types and tests, and pull-based rationale and plans in `kb/`.
 - Apply unreasonably robust programming when agent work is cheap. Model invalid states out of existence, parse foreign values from `unknown`, pair readable regression examples with property tests for general laws, and preserve exact browser-specific evidence.
 - Deliver changes to `main` through a current-head pull request. Keep the stable `Required` CI job green, resolve every review thread, and serialize merges. Human approval stays optional while one regular maintainer would otherwise self-review. Never force-push or bypass the gate.

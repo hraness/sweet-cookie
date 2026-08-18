@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.4.2 - 2026-08-18
+
+### Fixed
+
+- Preserve host-only cookie scope and exclude partitioned or container-scoped cookies that cannot be replayed safely.
+- Bind explicit Chromium profiles to their matching Safe Storage keychain and retain compatibility with older Chromium cookie schemas.
+- Keep the private Git-consumption shim, public core package, and portfolio inventory on one checked source version.
+
 ## 0.4.1 - 2026-08-01
 
 ### Changed

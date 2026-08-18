@@ -35,9 +35,9 @@ The CLI accepts a domain or full URL. It prints cookie output to stdout and prov
 Examples:
 
 ```bash
-npx @steipete/sweet-cookie github.com
-npx @steipete/sweet-cookie github.com --browser chrome --format header
-npx @steipete/sweet-cookie app.example.com --origin https://login.example.com --name session
+./node_modules/.bin/sweet-cookie github.com
+./node_modules/.bin/sweet-cookie github.com --browser chrome --format header
+./node_modules/.bin/sweet-cookie app.example.com --origin https://login.example.com --name session
 ```
 
 ## Library API
