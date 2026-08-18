@@ -1,33 +1,36 @@
 # Sweet Cookie 🍪 — Browser cookies, without the native-addon crumbs
 
-[![CI](https://img.shields.io/github/actions/workflow/status/steipete/sweet-cookie/ci.yml?branch=main&style=flat-square&label=ci)](https://github.com/steipete/sweet-cookie/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/@steipete/sweet-cookie?style=flat-square)](https://www.npmjs.com/package/@steipete/sweet-cookie)
-[![Node](https://img.shields.io/node/v/@steipete/sweet-cookie?style=flat-square)](https://nodejs.org/)
-[![License](https://img.shields.io/github/license/steipete/sweet-cookie?style=flat-square)](packages/core/LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/hraness/sweet-cookie/ci.yml?branch=main&style=flat-square&label=ci)](https://github.com/hraness/sweet-cookie/actions/workflows/ci.yml)
+[![npm upstream](https://img.shields.io/npm/v/@steipete/sweet-cookie?style=flat-square&label=npm%20upstream)](https://www.npmjs.com/package/@steipete/sweet-cookie)
+[![Node](https://img.shields.io/badge/node-%3E%3D22-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![License](https://img.shields.io/github/license/hraness/sweet-cookie?style=flat-square)](packages/core/LICENSE)
 
 Sweet Cookie is a TypeScript library and CLI for reading cookies from inline payloads or local Chrome, Edge, Firefox, and Safari profiles. It is for local Node.js and Bun tools that need HTTP headers or browser-compatible cookie objects without native Node addons.
 
+## Install
+
+Install the exact Hraness Git source release:
+
+```bash
+npm install github:hraness/sweet-cookie#v0.4.2
+```
+
+Then run the CLI through the local package:
+
+```bash
+./node_modules/.bin/sweet-cookie --help
+```
+
+The immutable upstream npm package remains at `@steipete/sweet-cookie@0.4.1`. It predates the
+Hraness safety fixes in v0.4.2 and is not the same source artifact.
+
+Node.js 22 or newer is required. The library also supports Bun through `bun:sqlite`.
+
 ```console
-$ npx @steipete/sweet-cookie example.com --inline-json \
+$ ./node_modules/.bin/sweet-cookie example.com --inline-json \
   '[{"name":"session","value":"demo","domain":"example.com","path":"/"}]' --format header
 Cookie: session=demo
 ```
-
-## Install
-
-Run the CLI without installing it:
-
-```bash
-npx @steipete/sweet-cookie --help
-```
-
-Or add the library to a project:
-
-```bash
-npm install @steipete/sweet-cookie
-```
-
-Node.js 22 or newer is required. The library also supports Bun through `bun:sqlite`.
 
 ## Quick start
 
