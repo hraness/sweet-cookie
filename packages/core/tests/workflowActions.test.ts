@@ -54,6 +54,31 @@ function collectReference(
 	references.push({ file, path: valuePath, position, target: value });
 }
 
+function requireCheckoutCredentialDiscard(
+	step: Record<string, unknown>,
+	file: string,
+	stepPath: string,
+): void {
+	const target = step.uses;
+	if (typeof target !== "string") {
+		return;
+	}
+	const separator = target.lastIndexOf("@");
+	if (
+		separator <= 0 ||
+		!remoteActionPattern.test(target) ||
+		target.slice(0, separator).toLowerCase() !== "actions/checkout"
+	) {
+		return;
+	}
+	const inputs = requireMapping(step.with, file, `${stepPath}.with`);
+	if (inputs["persist-credentials"] !== false) {
+		throw new TypeError(
+			`${file}:${stepPath}.with.persist-credentials must contain the boolean false`,
+		);
+	}
+}
+
 function collectStepReferences(
 	value: unknown,
 	file: string,
@@ -68,6 +93,7 @@ function collectStepReferences(
 		const step = requireMapping(stepValue, file, stepPath);
 		if (Object.hasOwn(step, "uses")) {
 			collectReference(step.uses, file, `${stepPath}.uses`, "step", references);
+			requireCheckoutCredentialDiscard(step, file, stepPath);
 		}
 	}
 }
@@ -299,6 +325,40 @@ describe("workflow action references", () => {
 				{ file: "quoted.yml", source: 'jobs:\n  check:\n    "uses": actions/checkout@main' },
 			]),
 		).toThrow(/full commit/u);
+	});
+
+	it("requires every case-equivalent checkout step to discard persisted credentials", () => {
+		const sha = "0123456789abcdef0123456789abcdef01234567";
+		const workflow = (step: string): WorkflowSource => ({
+			file: "checkout.yml",
+			source: `jobs: { check: { runs-on: ubuntu-latest, steps: [ ${step} ] } }`,
+		});
+
+		for (const invalidStep of [
+			`{ uses: actions/checkout@${sha} }`,
+			`{ uses: actions/checkout@${sha}, with: { persist-credentials: "false" } }`,
+			`{ uses: actions/checkout@${sha}, with: { fetch-depth: 0 } }`,
+			`{ uses: Actions/Checkout@${sha} }`,
+		]) {
+			expect(() => requirePinnedActionReferences([workflow(invalidStep)])).toThrow(
+				/with(?:\.persist-credentials)? must contain|persist-credentials must contain the boolean false/u,
+			);
+		}
+
+		expect(
+			requirePinnedActionReferences([
+				workflow(`{ uses: Actions/Checkout@${sha}, with: { persist-credentials: false } }`),
+			]).map(({ target }) => target),
+		).toEqual([`Actions/Checkout@${sha}`]);
+
+		expect(() =>
+			requirePinnedActionReferences(
+				[workflow("{ uses: ./local/action }")],
+				fixtureReferencePolicy({
+					"./local/action": `name: local\nruns:\n  using: composite\n  steps:\n    - uses: Actions/Checkout@${sha}`,
+				}),
+			),
+		).toThrow(/with must contain a mapping/u);
 	});
 
 	it("rejects invalid shapes, values, syntax, duplicates, and vacuous targets", () => {
