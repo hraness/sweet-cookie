@@ -13,6 +13,8 @@ describe("extension font contract", () => {
 		expect(css).toContain('--font: "Nebula Sans"');
 		expect(css).not.toContain("Avenir");
 		expect(css).toMatch(/input,[\s\S]*?font-family: var\(--mono\);/u);
+		expect(css).toMatch(/\.btn\s*\{[^}]*font-family: var\(--font\);/u);
+		expect(css).toMatch(/\.status\s*\{[^}]*font-family: var\(--mono\);/u);
 		expect(css).toMatch(/\.previewBody\s*\{[\s\S]*?font-family: var\(--mono\);/u);
 	});
 

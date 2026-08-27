@@ -12,7 +12,7 @@ Supports:
 Install:
 
 ```bash
-npm i github:hraness/sweet-cookie#v0.4.3
+npm i github:hraness/sweet-cookie#v0.4.4
 ```
 
 The upstream npm artifact `@steipete/sweet-cookie@0.4.1` is immutable historical evidence and
