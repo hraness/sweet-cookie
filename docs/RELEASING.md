@@ -56,7 +56,7 @@ ver="$(node -e '
   }
   process.stdout.write(core.version);
 ')"
-test "$ver" = "0.4.2"
+test "$ver" = "0.4.3"
 
 npm_missing_output="$(mktemp /tmp/sweet-cookie-npm-missing.XXXXXX)"
 if npm view \

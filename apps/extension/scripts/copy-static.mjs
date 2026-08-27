@@ -19,6 +19,18 @@ await copyFile(
 	new URL("../dist/popup.css", import.meta.url),
 );
 
+for (const filename of [
+	"LICENSE.txt",
+	"NebulaSans-Bold.woff2",
+	"NebulaSans-Book.woff2",
+	"PROVENANCE.md",
+]) {
+	await copyFile(
+		new URL(`../src/fonts/nebula-sans/${filename}`, import.meta.url),
+		new URL(`../dist/fonts/nebula-sans/${filename}`, import.meta.url),
+	);
+}
+
 async function copyFile(from, to) {
 	const toPath = fileURLToPath(to);
 	await fs.mkdir(path.dirname(toPath), { recursive: true });
