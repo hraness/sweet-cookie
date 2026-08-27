@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.4.3 - 2026-08-27
+
+### Changed
+
+- Use Nebula Sans for ordinary extension-popup interface text while keeping cookie data and diagnostics monospace.
+
 ## 0.4.2 - 2026-08-18
 
 ### Fixed

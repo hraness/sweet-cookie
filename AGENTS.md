@@ -20,6 +20,7 @@
 - Pin Hraness dependencies to reviewed immutable releases or full commits. Never connect repositories with sibling paths, Git submodules, or coordinated `main` assumptions.
 - Extract a shared package only after two concrete consumers need the same stable interface. Keep every shared package product-neutral and keep extension composition and browser-specific policy here.
 - For UI work, consume shared design-kit or `@hraness/ui` primitives only at immutable versions; keep product composition and the local visual contract in the owning product.
+- Use the official, unmodified Nebula Sans Book and Bold cuts for ordinary extension-popup text. Keep cookie names, values, and previews on the explicit monospace role, and ship the font license and provenance with the built extension.
 - Freeze shared interfaces before parallel lanes begin. Give manifests, lockfiles, generated files, and other convergence surfaces one owner while lanes edit disjoint paths.
 - Keep root product skills, when added, under `skills/`; `.agents/skills/` contains the portable repository baseline.
 - Do not change package manifests or locks for KB tooling. Run `bunx --bun github:hraness/kb#v0.15.1 refresh --root kb`, `bunx --bun github:hraness/kb#v0.15.1 check --root kb`, and `bunx --bun github:hraness/kb#v0.15.1 agents check --root kb --repo .` directly.

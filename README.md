@@ -12,7 +12,7 @@ Sweet Cookie is a TypeScript library and CLI for reading cookies from inline pay
 Install the exact Hraness Git source release:
 
 ```bash
-npm install github:hraness/sweet-cookie#v0.4.2
+npm install github:hraness/sweet-cookie#v0.4.3
 ```
 
 Then run the CLI through the local package:
