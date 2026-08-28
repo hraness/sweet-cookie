@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.4.4 - 2026-08-27
+
+### Fixed
+
+- Apply Nebula Sans explicitly to extension button labels and keep status diagnostics on their monospace role across browser form-control defaults.
+
 ## 0.4.3 - 2026-08-27
 
 ### Changed

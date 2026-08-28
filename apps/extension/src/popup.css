@@ -111,6 +111,7 @@ textarea:focus {
 	border: 1px solid var(--line);
 	background: rgba(255, 255, 255, 0.04);
 	color: var(--ink);
+	font-family: var(--font);
 	padding: 10px 10px;
 	font-size: 12px;
 	cursor: pointer;
@@ -127,6 +128,7 @@ textarea:focus {
 
 .status {
 	min-height: 16px;
+	font-family: var(--mono);
 	font-size: 12px;
 	color: var(--muted);
 }
