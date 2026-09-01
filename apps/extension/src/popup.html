@@ -7,53 +7,100 @@
 		<link rel="stylesheet" href="./popup.css" />
 	</head>
 	<body>
-		<header>
-			<div class="mark">Sweet Cookie</div>
-			<div class="sub">Cookie export for Oracle/SweetLink</div>
+		<header class="productHeader">
+			<div class="brandRow">
+				<div class="mark"><span class="cookieMark" aria-hidden="true"></span>Sweet Cookie</div>
+				<div class="runtime">Chrome MV3 · local only</div>
+			</div>
+			<h1>Export scoped cookies for a local tool.</h1>
+			<p class="sub">
+				Choose the target, narrow the names when you can, and export only after reviewing the scope.
+			</p>
+			<ul class="trustLine" aria-label="Exporter boundaries">
+				<li>No network requests</li>
+				<li>User-triggered reads</li>
+				<li>Current Chrome profile</li>
+			</ul>
 		</header>
 
-		<main>
-			<label class="field">
-				<div class="label">Target URL</div>
-				<input id="targetUrl" type="url" spellcheck="false" placeholder="https://chatgpt.com/" />
-			</label>
+		<main id="exportWorkflow">
+			<section class="step" aria-labelledby="scopeHeading">
+				<header class="stepHeading">
+					<span class="stepNumber" aria-hidden="true">01</span>
+					<div>
+						<h2 id="scopeHeading">Set the cookie scope</h2>
+						<p>Host access is requested only when you export.</p>
+					</div>
+				</header>
 
-			<label class="field">
-				<div class="label">Extra origins (optional)</div>
-				<textarea
-					id="extraOrigins"
-					rows="3"
-					spellcheck="false"
-					placeholder="https://accounts.google.com/\nhttps://login.microsoftonline.com/"
-				></textarea>
-			</label>
+				<div class="field">
+					<label for="targetUrl">Target URL</label>
+					<input
+						id="targetUrl"
+						type="url"
+						spellcheck="false"
+						placeholder="https://app.example.com/"
+					/>
+					<p>The active tab fills this field when its URL is available.</p>
+				</div>
 
-			<label class="field">
-				<div class="label">Cookie name allowlist (optional)</div>
-				<input
-					id="allowlist"
-					type="text"
-					spellcheck="false"
-					placeholder="__Secure-1PSID, __Secure-1PSIDTS"
-				/>
-			</label>
+				<div class="field">
+					<label for="extraOrigins">Extra origins <span>Optional</span></label>
+					<textarea
+						id="extraOrigins"
+						rows="3"
+						spellcheck="false"
+						placeholder="https://accounts.example.com/&#10;https://login.example.net/"
+					></textarea>
+					<p>Add one origin per line for an OAuth or multi-domain flow.</p>
+				</div>
 
-			<div class="row">
-				<button type="button" id="btnCopyJson" class="btn primary">Copy JSON</button>
-				<button type="button" id="btnCopyBase64" class="btn">Copy base64</button>
-				<button type="button" id="btnDownload" class="btn">Download</button>
-			</div>
+				<div class="field">
+					<label for="allowlist">Cookie name allowlist <span>Recommended</span></label>
+					<input id="allowlist" type="text" spellcheck="false" placeholder="session, csrf" />
+					<p>Separate names with commas. Leave blank to include every matching cookie.</p>
+				</div>
+			</section>
 
-			<div id="status" class="status"></div>
+			<section class="step outputStep" aria-labelledby="outputHeading">
+				<header class="stepHeading">
+					<span class="stepNumber" aria-hidden="true">02</span>
+					<div>
+						<h2 id="outputHeading">Choose the private output</h2>
+						<p>Each action reads cookies after Chrome grants the listed origins.</p>
+					</div>
+				</header>
 
-			<div class="preview">
-				<div class="previewTitle">Preview</div>
-				<div id="previewBody" class="previewBody">—</div>
-			</div>
+				<div class="row" aria-label="Cookie export formats">
+					<button type="button" id="btnCopyJson" class="btn primary">Copy JSON</button>
+					<button type="button" id="btnCopyBase64" class="btn">Copy base64</button>
+					<button type="button" id="btnDownload" class="btn">Download JSON</button>
+				</div>
+
+				<p class="privateOutput">
+					<strong>Private output.</strong> Clipboard and downloaded artifacts contain complete
+					cookie values. Handle and delete them as credentials.
+				</p>
+
+				<div id="status" class="status" role="status" aria-live="polite">
+					Cookies have not been read.
+				</div>
+			</section>
+
+			<section class="preview" aria-labelledby="previewHeading">
+				<header class="previewHeader">
+					<h2 id="previewHeading">Redacted preview</h2>
+					<span>Values fully masked</span>
+				</header>
+				<div id="previewBody" class="previewBody">Enter a target URL to inspect the scope.</div>
+			</section>
 		</main>
 
 		<footer>
-			<div class="hint">No network. User-triggered only. Values redacted in UI.</div>
+			<p>
+				Sweet Cookie stores the extra-origin and allowlist settings. It does not store exported
+				cookie values.
+			</p>
 		</footer>
 
 		<script type="module" src="./popup.js"></script>

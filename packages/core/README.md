@@ -1,74 +1,55 @@
 # @steipete/sweet-cookie
 
-Inline-first browser cookie extraction for local tooling (no native addons).
+Read scoped cookies from an inline payload or a local browser, then return browser-compatible
+cookie objects, bounded warnings, or an HTTP `Cookie:` header. The package supports Node.js 22 or
+newer and Bun without a native Node addon.
 
-Supports:
-
-- Inline payloads (JSON / base64 / file) — most reliable path.
-- Local browser reads (best effort): Chrome, Edge, Firefox, Safari (macOS).
-- On macOS, the `chrome` backend checks Chrome and Brave roots by default.
-- Default browser order is `chrome`, `safari`, `firefox` unless `browsers` or env overrides it.
-
-Install:
+Install Hraness version 0.4.4 from its immutable Git source tag:
 
 ```bash
-npm i github:hraness/sweet-cookie#v0.4.4
+npm install github:hraness/sweet-cookie#v0.4.4
 ```
 
-The upstream npm artifact `@steipete/sweet-cookie@0.4.1` is immutable historical evidence and
-does not contain the Hraness v0.4.2 safety fixes.
+The upstream npm artifact remains `@steipete/sweet-cookie@0.4.1`. It is a distinct historical
+artifact and does not contain the current Hraness source.
 
-CLI:
+## Smallest useful action
 
-```bash
-./node_modules/.bin/sweet-cookie github.com
-./node_modules/.bin/sweet-cookie github.com --browser chrome --format header
+An inline result runs before local browser access and returns immediately when it contains matching
+cookies:
+
+```console
+$ ./node_modules/.bin/sweet-cookie example.com --inline-json \
+  '[{"name":"session","value":"demo","domain":"example.com","path":"/"}]' --format header
+Cookie: session=demo
 ```
 
-Usage:
+That command does not read a browser database, invoke an operating-system credential helper, or
+make a network request.
+
+## Library
 
 ```ts
 import { getCookies, toCookieHeader } from "@steipete/sweet-cookie";
 
 const { cookies, warnings } = await getCookies({
-	url: "https://example.com/",
+	url: "https://app.example.com/",
+	origins: ["https://accounts.example.com/"],
 	names: ["session", "csrf"],
-	browsers: ["chrome", "edge", "firefox", "safari"],
+	browsers: ["chrome", "firefox"],
 });
 
-for (const w of warnings) console.warn(w);
-const cookieHeader = toCookieHeader(cookies, { dedupeByName: true });
+for (const warning of warnings) console.warn(warning);
+const header = toCookieHeader(cookies, { dedupeByName: true });
 ```
 
-macOS-specific Chromium targeting:
+Inline JSON, base64, and file sources take precedence over local browsers. Without an inline
+result, the default browser order is Chrome, Safari, then Firefox. Chrome, Edge, Firefox, and Safari
+profile selectors remain explicit inputs.
 
-```ts
-await getCookies({
-	url: "https://example.com/",
-	browsers: ["chrome"],
-	chromiumBrowser: "brave",
-});
-```
+Partitioned Chromium cookies and partitioned or container-scoped Firefox cookies are excluded
+because the output cannot preserve their isolation context. Raw cookie values are excluded from
+warnings, but successful return values and CLI output contain live credentials.
 
-Linux/Windows Brave or other Chromium-family profiles:
-
-```ts
-await getCookies({
-	url: "https://example.com/",
-	browsers: ["chrome"],
-	chromeProfile: "~/.config/BraveSoftware/Brave-Browser/Default",
-});
-```
-
-Notes:
-
-- `profile` is a shared alias for `chromeProfile` / `edgeProfile`.
-- `chromiumBrowser` pins the macOS `chrome` backend to `chrome`, `brave`, `arc`, or `chromium`.
-- Inline payloads win first; otherwise local backends run in declared order.
-- Cookie results preserve `hostOnly`; exact-host and domain scope remain distinct during filtering and deduplication.
-- Partitioned Chromium cookies and partitioned or container-scoped Firefox cookies are excluded with warnings because replay cannot preserve their isolation context.
-- On Linux/Windows, Brave and other Chromium-family profiles work via an explicit `chromeProfile` path.
-- `edgeProfile` falls back to `SWEET_COOKIE_CHROME_PROFILE` when `SWEET_COOKIE_EDGE_PROFILE` is unset.
-- On Linux, Chromium safe-storage overrides also support `SWEET_COOKIE_BRAVE_SAFE_STORAGE_PASSWORD`.
-
-Docs + extension exporter: see the repo root README.
+See the [repository README](https://github.com/hraness/sweet-cookie#readme) for CLI workflows,
+browser support, the current-profile Chrome exporter, and full custody boundaries.

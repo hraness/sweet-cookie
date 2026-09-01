@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Changed
+
+- Reframe the Chrome exporter around reviewed origin scope, current-profile custody, and private output handling.
+
+### Fixed
+
+- Fully mask cookie values in the extension preview instead of revealing their first six characters.
+
 ## 0.4.4 - 2026-08-27
 
 ### Fixed

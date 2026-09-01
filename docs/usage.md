@@ -159,7 +159,7 @@ Explicit function options take precedence over environment variables.
 
 ## Extension exporter
 
-The extension in [`apps/extension`](../apps/extension) exports cookies from its current Chrome profile. It accepts a target URL, extra origins, and an optional cookie-name allowlist, then offers JSON, base64, and file outputs. The popup requests host permission for the entered origins at export time, stores only its origin and allowlist settings, and makes no network requests.
+The extension in [`apps/extension`](../apps/extension) exports cookies from its current Chrome profile. It accepts a target URL, extra origins, and an optional cookie-name allowlist, then offers JSON, base64, and file outputs. The popup requests host permission for the entered origins at export time, stores only its origin and allowlist settings, and makes no network requests. Its preview fully masks values; clipboard and file outputs contain complete cookie credentials.
 
 Pass an exported payload back to the library through an inline option:
 

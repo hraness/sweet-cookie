@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "Sweet Cookie",
 	"version": "0.0.0",
-	"description": "Export cookies from the current Chrome profile for use in local tools.",
+	"description": "Export scoped cookies from the current Chrome profile to a private local output.",
 	"action": {
 		"default_title": "Sweet Cookie",
 		"default_popup": "popup.html"
