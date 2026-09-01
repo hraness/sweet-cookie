@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { exportedCookieKey, mapChromeCookie } from "../src/cookie-export.js";
+import { exportedCookieKey, mapChromeCookie, redactedCookieValue } from "../src/cookie-export.js";
 
 function chromeCookie(overrides: Partial<chrome.cookies.Cookie> = {}): chrome.cookies.Cookie {
 	return {
@@ -55,6 +55,14 @@ describe("extension cookie export", () => {
 			const cookie = chromeCookie();
 			Reflect.set(cookie, "partitionKey", partitionKey);
 			expect(mapChromeCookie(cookie)).toMatchObject({ name: "sid", value: "value" });
+		}
+	});
+
+	it("fully masks preview values without retaining a secret prefix", () => {
+		for (const value of ["short", "secret-prefix-and-more", "session-token-123456"]) {
+			const masked = redactedCookieValue(value);
+			expect(masked).toBe("••••••");
+			expect(masked).not.toContain(value);
 		}
 	});
 

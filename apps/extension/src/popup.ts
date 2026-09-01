@@ -1,4 +1,9 @@
-import { exportedCookieKey, mapChromeCookie, type ExportedCookie } from "./cookie-export.js";
+import {
+	exportedCookieKey,
+	mapChromeCookie,
+	redactedCookieValue,
+	type ExportedCookie,
+} from "./cookie-export.js";
 
 type ExportPayload = {
 	version: 1;
@@ -63,7 +68,7 @@ function schedulePreview(): void {
 async function refreshPreview(): Promise<void> {
 	const targetUrl = els.targetUrl.value.trim();
 	if (!targetUrl) {
-		els.previewBody.textContent = "—";
+		els.previewBody.textContent = "Enter a target URL to inspect the scope.";
 		return;
 	}
 
@@ -76,68 +81,80 @@ async function refreshPreview(): Promise<void> {
 	const origins = collectOrigins(parsed.origin, els.extraOrigins.value);
 	const allowlist = parseAllowlist(els.allowlist.value);
 	els.previewBody.textContent =
-		`origins: ${origins.length}\n` +
-		`allowlist: ${allowlist?.size ? `${allowlist.size} name(s)` : "none"}\n` +
-		`ready: click export`;
+		`scope origins: ${origins.length}\n` +
+		`cookie names: ${allowlist?.size ? `${allowlist.size} selected` : "all matching names"}\n` +
+		`state: no cookie values read`;
 }
 
 async function handleExport(mode: "json" | "base64" | "download"): Promise<void> {
-	setStatus("Working…");
+	setExportBusy(true);
+	setStatus("Requesting the reviewed origin scope…");
 
-	const targetUrl = els.targetUrl.value.trim();
-	const parsed = tryParseUrl(targetUrl);
-	if (!parsed) {
-		setStatus("Invalid target URL.", "error");
-		return;
+	try {
+		const targetUrl = els.targetUrl.value.trim();
+		const parsed = tryParseUrl(targetUrl);
+		if (!parsed) {
+			setStatus("Enter a valid target URL before exporting.", "error");
+			return;
+		}
+
+		const origins = collectOrigins(parsed.origin, els.extraOrigins.value);
+		const allowlist = parseAllowlist(els.allowlist.value);
+
+		await chrome.storage.local.set({
+			[STORAGE_KEY]: {
+				extraOrigins: els.extraOrigins.value,
+				allowlist: els.allowlist.value,
+			},
+		});
+
+		const originPerms = origins.map((origin) => originToPermission(origin));
+		const granted = await chrome.permissions.request({ origins: originPerms });
+		if (!granted) {
+			setStatus(
+				"Chrome denied the requested origin scope. Review the URLs and try again.",
+				"error",
+			);
+			return;
+		}
+
+		setStatus("Reading matching cookies from the current Chrome profile…");
+		const cookies = await collectCookies(origins, allowlist);
+		const payload: ExportPayload = {
+			version: 1,
+			generatedAt: new Date().toISOString(),
+			source: "sweet-cookie",
+			browser: "chrome",
+			targetUrl,
+			origins,
+			cookies,
+		};
+
+		const json = JSON.stringify(payload, null, 2);
+		els.previewBody.textContent = buildRedactedPreview(payload);
+
+		if (mode === "json") {
+			await navigator.clipboard.writeText(json);
+			setStatus(`Copied JSON with ${cookies.length} cookie(s).`);
+			return;
+		}
+		if (mode === "base64") {
+			const base64 = encodeBase64(json);
+			await navigator.clipboard.writeText(base64);
+			setStatus(`Copied base64 with ${cookies.length} cookie(s).`);
+			return;
+		}
+
+		downloadTextFile("sweet-cookie.cookies.json", json);
+		setStatus(`Downloaded JSON with ${cookies.length} cookie(s).`);
+	} catch {
+		setStatus(
+			"Export failed. Review the target, origin permission, and output access, then try again.",
+			"error",
+		);
+	} finally {
+		setExportBusy(false);
 	}
-
-	const origins = collectOrigins(parsed.origin, els.extraOrigins.value);
-	const allowlist = parseAllowlist(els.allowlist.value);
-
-	await chrome.storage.local.set({
-		[STORAGE_KEY]: {
-			extraOrigins: els.extraOrigins.value,
-			allowlist: els.allowlist.value,
-		},
-	});
-
-	const originPerms = origins.map((origin) => originToPermission(origin));
-	const granted = await chrome.permissions.request({ origins: originPerms });
-	if (!granted) {
-		setStatus("Permission denied. Cannot read cookies for requested origins.", "error");
-		return;
-	}
-
-	const cookies = await collectCookies(origins, allowlist);
-	const payload: ExportPayload = {
-		version: 1,
-		generatedAt: new Date().toISOString(),
-		source: "sweet-cookie",
-		browser: "chrome",
-		targetUrl,
-		origins,
-		cookies,
-	};
-
-	const json = JSON.stringify(payload, null, 2);
-
-	const preview = buildRedactedPreview(payload);
-	els.previewBody.textContent = preview;
-
-	if (mode === "json") {
-		await navigator.clipboard.writeText(json);
-		setStatus(`Copied JSON (${cookies.length} cookie(s)).`);
-		return;
-	}
-	if (mode === "base64") {
-		const base64 = encodeBase64(json);
-		await navigator.clipboard.writeText(base64);
-		setStatus(`Copied base64 (${cookies.length} cookie(s)).`);
-		return;
-	}
-
-	downloadTextFile("sweet-cookie.cookies.json", json);
-	setStatus(`Downloaded JSON (${cookies.length} cookie(s)).`);
 }
 
 function collectOrigins(primaryOrigin: string, extraOriginsText: string): string[] {
@@ -227,23 +244,22 @@ function buildRedactedPreview(payload: ExportPayload): string {
 
 	const sample = payload.cookies
 		.slice(0, 6)
-		.map((c) => `${c.name}=${redact(c.value)}`)
+		.map((c) => `${c.name}=${redactedCookieValue(c.value)}`)
 		.join("\n");
 
-	return `cookies: ${payload.cookies.length}\n\nby domain:\n${domains || "—"}\n\nsample:\n${sample || "—"}`;
-}
-
-function redact(value: string): string {
-	const trimmed = value ?? "";
-	if (trimmed.length <= 6) {
-		return "••••••";
-	}
-	return `${trimmed.slice(0, 6)}…`;
+	return `cookies: ${payload.cookies.length}\n\nby domain:\n${domains || "—"}\n\nfully masked sample:\n${sample || "—"}`;
 }
 
 function setStatus(message: string, kind: "ok" | "error" = "ok"): void {
 	els.status.textContent = message;
 	els.status.className = kind === "error" ? "status error" : "status";
+}
+
+function setExportBusy(busy: boolean): void {
+	for (const button of [els.btnCopyJson, els.btnCopyBase64, els.btnDownload]) {
+		button.disabled = busy;
+	}
+	document.getElementById("exportWorkflow")?.setAttribute("aria-busy", String(busy));
 }
 
 function tryParseUrl(input: string): URL | null {

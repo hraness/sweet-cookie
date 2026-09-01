@@ -118,13 +118,13 @@ Example shape:
 	"generatedAt": "2025-12-27T18:00:00.000Z",
 	"source": "sweet-cookie",
 	"browser": "chrome",
-	"targetUrl": "https://chatgpt.com/",
-	"origins": ["https://chatgpt.com/"],
+	"targetUrl": "https://app.example.com/",
+	"origins": ["https://app.example.com/"],
 	"cookies": [
 		{
-			"name": "__Secure-next-auth.session-token",
-			"value": "…",
-			"domain": "chatgpt.com",
+			"name": "session",
+			"value": "<redacted>",
+			"domain": "app.example.com",
 			"path": "/",
 			"secure": true,
 			"httpOnly": true,
@@ -151,10 +151,10 @@ Popup UX (actual):
 - Target URL input, prefilled from the active tab when available
 - Extra origins (multi-line), optional
 - Cookie allowlist (comma-separated names), optional
-- `Copy JSON`, `Copy base64`, `Download`
+- `Copy JSON`, `Copy base64`, `Download JSON`
 - Preview area:
   - before export: config summary (`origins`, allowlist count, ready state)
-  - after export: cookie count, top domains, redacted sample values
+  - after export: cookie count, top domains, and cookie names with fully masked values
 
 Defaults:
 
@@ -217,7 +217,7 @@ Important: avoid re-implementing RFC cookie matching/order. If we export for reu
 
 - No automatic/background exports. User gesture only.
 - No network exfiltration. No remote endpoints.
-- No logging raw cookie values (ever). UI should show redacted values only.
+- No logging raw cookie values (ever). UI should show fully masked values only.
 - Offer allowlist names as a first-class control.
 - Persist only `extraOrigins` / `allowlist`; never cookie values.
 

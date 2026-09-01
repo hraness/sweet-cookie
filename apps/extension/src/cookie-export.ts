@@ -61,6 +61,10 @@ export function exportedCookieKey(cookie: ExportedCookie, storeId: string): stri
 	return `${cookie.name}|${cookie.domain ?? ""}|${scope}|${cookie.path ?? ""}|${storeId}`;
 }
 
+export function redactedCookieValue(_value: string): string {
+	return "••••••";
+}
+
 function normalizeSameSite(
 	value: chrome.cookies.Cookie["sameSite"],
 ): SweetCookieSameSite | undefined {

@@ -2,7 +2,7 @@
 	"name": "@steipete/sweet-cookie",
 	"version": "0.4.4",
 	"private": true,
-	"description": "Inline-first browser cookie extraction for local tooling (no native addons).",
+	"description": "Read scoped cookies from inline payloads or local browsers for Node.js and Bun tools.",
 	"homepage": "https://github.com/hraness/sweet-cookie#readme",
 	"bugs": {
 		"url": "https://github.com/hraness/sweet-cookie/issues"
