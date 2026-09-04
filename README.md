@@ -100,6 +100,8 @@ Sweet Cookie excludes Chromium partitioned cookies and Firefox partitioned or co
 
 The Chrome Manifest V3 extension in [`apps/extension`](apps/extension) exports cookies from the current profile as JSON, base64, or a downloaded file. Use it when app-bound encryption, keychain prompts, remote execution, or another browser boundary prevents a local database read.
 
+Build the extension and load the generated `apps/extension/dist` directory in Chrome; the source directory is not loadable as-is. Follow the [build and loading instructions](docs/usage.md#build-and-load-in-chrome).
+
 The extension requests host access when you export, runs only after a user action, makes no network requests, and stores no cookie values. Its payload is accepted directly through `inlineCookiesJson`, `inlineCookiesBase64`, or `inlineCookiesFile`. See the [extension and payload specification](docs/spec.md).
 
 ## Reference
@@ -111,7 +113,7 @@ The extension requests host access when you export, runs only after a user actio
 
 ## Development
 
-Repository development requires Node.js 22.13 or newer and pnpm 11.18.
+Repository development requires Node.js 22.13 or newer and pnpm 11.24.
 
 ```bash
 pnpm install --frozen-lockfile
