@@ -1,6 +1,17 @@
 # Changelog
 
-## Unreleased
+## 0.4.3 - Unreleased
+
+## 0.4.2 - 2026-08-28
+
+### Fixed
+
+- Fix the Chrome extension setup guide: build first, then load `apps/extension/dist` in Chrome without moving source files. (`#45`, fixes `#41`, thanks `@YOSI-COHEN`)
+
+### Changed
+
+- Clarify installation, CLI usage, browser support, and profile selection in the README and full usage guide. (`#39`)
+- Refresh development dependencies and CI tooling, including pnpm, TypeScript, and the test, lint, and build tools. (`#44`)
 
 ## 0.4.1 - 2026-08-01
 
