@@ -90,6 +90,8 @@ const { cookies } = await getCookies({
 
 Chrome and Edge use their default profile when no selector is provided. Firefox prefers `default-release`; Safari has a cookie-file override rather than a profile selector.
 
+On Linux, the Chrome backend searches native and Flatpak Google Chrome roots by default. Set `chromiumBrowser` to target native or container roots for Chromium or Brave. Firefox searches its native, Snap, and Flatpak profile roots.
+
 ## Cookie scope and isolation
 
 Returned cookies preserve `hostOnly`: host-only cookies match exactly one hostname, while domain cookies may match subdomains. Scope is also part of deduplication, so host-only and domain cookies with the same name, normalized domain, and path remain distinct.
@@ -113,7 +115,7 @@ The extension requests host access when you export, runs only after a user actio
 
 ## Development
 
-Repository development requires Node.js 22.13 or newer and pnpm 11.24.
+Repository development requires Node.js 22.13 or newer and pnpm 11.25.
 
 ```bash
 pnpm install --frozen-lockfile
