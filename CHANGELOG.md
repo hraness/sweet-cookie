@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.4 - 2026-09-07
 
 ### Changed
 
@@ -9,12 +9,8 @@
 ### Fixed
 
 - Fully mask cookie values in the extension preview instead of revealing their first six characters.
-
-## 0.4.4 - 2026-08-27
-
-### Fixed
-
 - Apply Nebula Sans explicitly to extension button labels and keep status diagnostics on their monospace role across browser form-control defaults.
+- Exclude CDP cookies marked `partitionKeyOpaque: true`, including when their partition key is absent or null, and stop browser-store fallback after inline isolation is rejected. This adopts the safety follow-up from [upstream #51](https://github.com/steipete/sweet-cookie/pull/51).
 
 ## 0.4.3 - 2026-08-27
 

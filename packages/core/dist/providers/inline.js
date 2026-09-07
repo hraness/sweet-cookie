@@ -17,7 +17,7 @@ export async function getCookiesFromInline(inline, origins, allowlistNames) {
     const decoded = tryDecodeBase64Json(rawPayload) ?? rawPayload;
     const parsed = tryParseCookiePayload(decoded);
     if (!parsed) {
-        return { cookies: [], warnings };
+        return { cookies: [], warnings, excludedUnsupportedIsolation: false };
     }
     const hostAllow = new Set(origins.map((o) => new URL(o).hostname));
     const cookies = [];
@@ -44,7 +44,7 @@ export async function getCookiesFromInline(inline, origins, allowlistNames) {
     if (isolatedCookieCount > 0) {
         warnings.push(`${isolatedCookieCount} inline cookie(s) with partition or container provenance were excluded because replay cannot preserve their isolation context.`);
     }
-    return { cookies, warnings };
+    return { cookies, warnings, excludedUnsupportedIsolation: isolatedCookieCount > 0 };
 }
 function hasUnsupportedIsolationProvenance(cookie) {
     const value = cookie;
@@ -52,7 +52,8 @@ function hasUnsupportedIsolationProvenance(cookie) {
         return false;
     }
     const record = value;
-    if (record["partitionKey"] !== undefined && record["partitionKey"] !== null) {
+    if (record["partitionKeyOpaque"] === true ||
+        (record["partitionKey"] !== undefined && record["partitionKey"] !== null)) {
         return true;
     }
     const topFrameSiteKey = typeof record["top_frame_site_key"] === "string" ? record["top_frame_site_key"].trim() : "";
