@@ -78,6 +78,56 @@ describe("public API", () => {
 		expect(res.cookies.map((c) => c.name)).toEqual(["inline"]);
 	});
 
+	it.each([
+		{ partitionKey: { topLevelSite: "https://example.com" } },
+		{ partitionKeyOpaque: true },
+		{ partitionKey: null, partitionKeyOpaque: true },
+		{ originAttributes: "^userContextId=2" },
+	])("does not fall back to browser stores after rejecting inline isolation %j", async (marker) => {
+		vi.resetModules();
+		const readChrome = vi.fn(async () => ({ cookies: [], warnings: [] }));
+		vi.doMock("../src/providers/chrome.js", () => ({ getCookiesFromChrome: readChrome }));
+
+		try {
+			const { getCookies } = await import("../src/index.js");
+			const res = await getCookies({
+				url: "https://chatgpt.com/",
+				inlineCookiesJson: JSON.stringify({
+					cookies: [{ name: "isolated", value: "synthetic", domain: "chatgpt.com", ...marker }],
+				}),
+				browsers: ["chrome"],
+			});
+
+			expect(res.cookies).toEqual([]);
+			expect(res.warnings).toEqual([
+				"1 inline cookie(s) with partition or container provenance were excluded because replay cannot preserve their isolation context.",
+			]);
+			expect(readChrome).not.toHaveBeenCalled();
+		} finally {
+			vi.doUnmock("../src/providers/chrome.js");
+			vi.resetModules();
+		}
+	});
+
+	it("accepts a later safe inline source after rejecting an isolated source", async () => {
+		const { getCookies } = await import("../src/index.js");
+		const res = await getCookies({
+			url: "https://chatgpt.com/",
+			inlineCookiesJson: JSON.stringify({
+				cookies: [
+					{ name: "isolated", value: "synthetic", domain: "chatgpt.com", partitionKeyOpaque: true },
+				],
+			}),
+			inlineCookiesBase64: Buffer.from(buildInlinePayload(), "utf8").toString("base64"),
+			browsers: ["chrome"],
+		});
+
+		expect(res.cookies.map(({ name }) => name)).toEqual(["inline"]);
+		expect(res.warnings).toEqual([
+			"1 inline cookie(s) with partition or container provenance were excluded because replay cannot preserve their isolation context.",
+		]);
+	});
+
 	it("fails closed when the target URL has no filterable origin", async () => {
 		const { getCookies } = await import("../src/index.js");
 		const res = await getCookies({
