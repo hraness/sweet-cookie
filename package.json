@@ -1,67 +1,67 @@
 {
-  "name": "@steipete/sweet-cookie",
-  "version": "0.4.4",
-  "private": true,
-  "description": "Read scoped cookies from inline payloads or local browsers for Node.js and Bun tools.",
-  "homepage": "https://github.com/hraness/sweet-cookie#readme",
-  "bugs": {
-    "url": "https://github.com/hraness/sweet-cookie/issues"
-  },
-  "license": "MIT",
-  "author": "Peter Steinberger",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hraness/sweet-cookie.git"
-  },
-  "bin": {
-    "sweet-cookie": "packages/core/dist/cli.js"
-  },
-  "files": [
-    "packages/core/dist",
-    "packages/core/LICENSE",
-    "packages/core/README.md",
-    "README.md"
-  ],
-  "type": "module",
-  "main": "packages/core/dist/index.js",
-  "types": "packages/core/dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./packages/core/dist/index.d.ts",
-      "import": "./packages/core/dist/index.js"
-    },
-    "./cli": {
-      "types": "./packages/core/dist/cli.d.ts",
-      "import": "./packages/core/dist/cli.js"
-    }
-  },
-  "scripts": {
-    "build": "pnpm -r build",
-    "check:cost-surfaces": "node ./scripts/check-cost-surfaces.mjs",
-    "check": "node ./scripts/check-cost-surfaces.mjs && pnpm format:check && pnpm typecheck && pnpm lint",
-    "format": "oxfmt --write .",
-    "format:check": "oxfmt --check .",
-    "format:diff": "oxfmt --write . && git --no-pager diff",
-    "lint": "oxlint --type-aware --tsconfig tsconfig.lint.json --config .oxlintrc.json .",
-    "lint:fix": "oxlint --type-aware --tsconfig tsconfig.lint.json --config .oxlintrc.json --fix . && pnpm format",
-    "test": "vitest run --coverage",
-    "test:bun": "bun test packages/core/tests-bun",
-    "test:watch": "vitest",
-    "typecheck": "pnpm -r typecheck"
-  },
-  "devDependencies": {
-    "@types/node": "^26.1.1",
-    "@vitest/coverage-v8": "^4.1.10",
-    "oxfmt": "^0.61.0",
-    "oxlint": "^1.76.0",
-    "oxlint-tsgolint": "^7.0.2001",
-    "typescript": "^7.0.2",
-    "vite": "^8.2.0",
-    "vitest": "^4.1.10",
-    "yaml": "2.9.0"
-  },
-  "engines": {
-    "node": ">=22.13.0"
-  },
-  "packageManager": "pnpm@11.18.0"
+	"name": "@steipete/sweet-cookie",
+	"version": "0.4.4",
+	"private": true,
+	"description": "Read scoped cookies from inline payloads or local browsers for Node.js and Bun tools.",
+	"homepage": "https://github.com/hraness/sweet-cookie#readme",
+	"bugs": {
+		"url": "https://github.com/hraness/sweet-cookie/issues"
+	},
+	"license": "MIT",
+	"author": "Peter Steinberger",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/hraness/sweet-cookie.git"
+	},
+	"bin": {
+		"sweet-cookie": "packages/core/dist/cli.js"
+	},
+	"files": [
+		"packages/core/dist",
+		"packages/core/LICENSE",
+		"packages/core/README.md",
+		"README.md"
+	],
+	"type": "module",
+	"main": "packages/core/dist/index.js",
+	"types": "packages/core/dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./packages/core/dist/index.d.ts",
+			"import": "./packages/core/dist/index.js"
+		},
+		"./cli": {
+			"types": "./packages/core/dist/cli.d.ts",
+			"import": "./packages/core/dist/cli.js"
+		}
+	},
+	"scripts": {
+		"build": "pnpm -r build",
+		"check:cost-surfaces": "node ./scripts/check-cost-surfaces.mjs",
+		"check": "node ./scripts/check-cost-surfaces.mjs && pnpm format:check && pnpm typecheck && pnpm lint",
+		"format": "oxfmt --write .",
+		"format:check": "oxfmt --check .",
+		"format:diff": "oxfmt --write . && git --no-pager diff",
+		"lint": "oxlint --type-aware --tsconfig tsconfig.lint.json --config .oxlintrc.json .",
+		"lint:fix": "oxlint --type-aware --tsconfig tsconfig.lint.json --config .oxlintrc.json --fix . && pnpm format",
+		"test": "vitest run --coverage",
+		"test:bun": "bun test packages/core/tests-bun",
+		"test:watch": "vitest",
+		"typecheck": "pnpm -r typecheck"
+	},
+	"devDependencies": {
+		"@types/node": "^26.1.1",
+		"@vitest/coverage-v8": "^4.1.10",
+		"oxfmt": "^0.61.0",
+		"oxlint": "^1.76.0",
+		"oxlint-tsgolint": "^7.0.2001",
+		"typescript": "^7.0.2",
+		"vite": "^8.2.0",
+		"vitest": "^4.1.10",
+		"yaml": "2.9.0"
+	},
+	"engines": {
+		"node": ">=22.13.0"
+	},
+	"packageManager": "pnpm@11.18.0"
 }
