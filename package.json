@@ -37,7 +37,7 @@
 	},
 	"scripts": {
 		"build": "pnpm -r build",
-		"check:cost-surfaces": "bun ./scripts/check-cost-surfaces.mjs",
+		"check:cost-surfaces": "node ./scripts/check-cost-surfaces.mjs",
     "check": "bun run check:cost-surfaces && pnpm format:check && pnpm typecheck && pnpm lint",
 		"format": "oxfmt --write .",
 		"format:check": "oxfmt --check .",
