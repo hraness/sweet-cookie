@@ -16,9 +16,10 @@ The target URL, extra origins, cookie-name allowlist, source order, profile, and
 explicit. Non-fatal source problems appear as warnings without raw cookie values.
 
 > **Distribution boundary:** Upstream [`@steipete/sweet-cookie`](https://www.npmjs.com/package/@steipete/sweet-cookie)
-> 0.4.3 and later include the host-only and partition fixes this fork was created for. New projects
-> can install upstream from npm. This repository does not publish the Hraness fork to npm, and its
-> Git tag v0.4.4 is a different artifact from npm 0.4.4.
+> 0.4.3 and later include the host-only, partitioned-cookie, and isolation fixes this fork carries.
+> New projects can install upstream from npm.
+> This repository does not publish the Hraness fork to npm, and its Git tag v0.4.4 is a different
+> artifact from npm 0.4.4.
 
 ## Smallest useful action
 
