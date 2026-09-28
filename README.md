@@ -3,7 +3,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/hraness/sweet-cookie/ci.yml?branch=main&style=flat-square&label=ci)](https://github.com/hraness/sweet-cookie/actions/workflows/ci.yml)
 [![npm upstream](https://img.shields.io/npm/v/@steipete/sweet-cookie?style=flat-square&label=npm%20upstream)](https://www.npmjs.com/package/@steipete/sweet-cookie)
 [![Node](https://img.shields.io/badge/node-%3E%3D22-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![License](https://img.shields.io/github/license/hraness/sweet-cookie?style=flat-square)](packages/core/LICENSE)
+[![License](https://img.shields.io/github/license/hraness/sweet-cookie?style=flat-square)](LICENSE)
 
 ## Read scoped browser cookies for a local tool
 
@@ -15,9 +15,11 @@ SQLite support, so the package does not add a native Node addon.
 The target URL, extra origins, cookie-name allowlist, source order, profile, and output format stay
 explicit. Non-fatal source problems appear as warnings without raw cookie values.
 
-> **Distribution boundary:** Install Hraness version 0.4.4 from its immutable Git source tag. The
-> upstream npm artifact remains `@steipete/sweet-cookie@0.4.1`; it predates the Hraness safety fixes
-> and is not the same source artifact. This repository does not publish the Hraness fork to npm.
+> **Distribution boundary:** Upstream [`@steipete/sweet-cookie`](https://www.npmjs.com/package/@steipete/sweet-cookie)
+> 0.4.3 and later include the host-only, partitioned-cookie, and isolation fixes this fork carries.
+> New projects can install upstream from npm.
+> This repository does not publish the Hraness fork to npm, and its Git tag v0.4.4 is a different
+> artifact from npm 0.4.4.
 
 ## Smallest useful action
 

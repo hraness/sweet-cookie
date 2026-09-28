@@ -10,8 +10,9 @@ Install Hraness version 0.4.4 from its immutable Git source tag:
 npm install github:hraness/sweet-cookie#v0.4.4
 ```
 
-The upstream npm artifact remains `@steipete/sweet-cookie@0.4.1`. It is a distinct historical
-artifact and does not contain the current Hraness source.
+Upstream `@steipete/sweet-cookie` 0.4.3 and later on npm include the host-only, partitioned-cookie,
+and isolation fixes this fork carries. This fork's Git tag v0.4.4 is a different artifact from npm
+0.4.4.
 
 ## Smallest useful action
 
