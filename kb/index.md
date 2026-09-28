@@ -28,8 +28,8 @@ Git history is the maintenance log. Do not add generated backlink sections or a 
 Run the pinned KB tools directly without changing this upstream-derived repository's package manifests:
 
 ```sh
-bunx --bun github:hraness/kb#v0.15.1 refresh --root kb
-bunx --bun github:hraness/kb#v0.15.1 check --root kb
-bunx --bun github:hraness/kb#v0.15.1 agents check --root kb --repo .
+bunx --bun --package https://github.com/hraness/wordcell/releases/download/v0.24.0/hraness-wordcell-0.24.0.tgz wordcell refresh --root kb
+bunx --bun --package https://github.com/hraness/wordcell/releases/download/v0.24.0/hraness-wordcell-0.24.0.tgz wordcell check --root kb
+bunx --bun --package https://github.com/hraness/wordcell/releases/download/v0.24.0/hraness-wordcell-0.24.0.tgz wordcell agents check --root kb --repo .
 ```
 

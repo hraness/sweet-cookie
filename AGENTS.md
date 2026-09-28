@@ -23,7 +23,7 @@
 - Use the official, unmodified Nebula Sans Book and Bold cuts for ordinary extension-popup text. Keep cookie names, values, and previews on the explicit monospace role, and ship the font license and provenance with the built extension.
 - Freeze shared interfaces before parallel lanes begin. Give manifests, lockfiles, generated files, and other convergence surfaces one owner while lanes edit disjoint paths.
 - Keep root product skills, when added, under `skills/`; `.agents/skills/` contains the portable repository baseline.
-- Do not change package manifests or locks for KB tooling. Run `bunx --bun github:hraness/kb#v0.15.1 refresh --root kb`, `bunx --bun github:hraness/kb#v0.15.1 check --root kb`, and `bunx --bun github:hraness/kb#v0.15.1 agents check --root kb --repo .` directly.
+- Do not change package manifests or locks for KB tooling. Run `bunx --bun --package https://github.com/hraness/wordcell/releases/download/v0.24.0/hraness-wordcell-0.24.0.tgz wordcell refresh --root kb`, `bunx --bun --package https://github.com/hraness/wordcell/releases/download/v0.24.0/hraness-wordcell-0.24.0.tgz wordcell check --root kb`, and `bunx --bun --package https://github.com/hraness/wordcell/releases/download/v0.24.0/hraness-wordcell-0.24.0.tgz wordcell agents check --root kb --repo .` directly.
 - Run `pnpm check`, `pnpm build`, `pnpm test`, and `pnpm test:bun` before handing off source changes.
 
 <!-- oompa-local-efficiency:start -->
