@@ -111,5 +111,6 @@ describeIfWin("chrome sqlite (windows) integration", () => {
 
 		expect(res.cookies).toHaveLength(1);
 		expect(res.cookies[0]?.value).toBe("cookie-value");
-	}, 15_000);
+		// Cold PowerShell + DPAPI on hosted windows-latest runners has taken 22 s (run 36374198245).
+	}, 60_000);
 });
