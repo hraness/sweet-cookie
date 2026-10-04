@@ -115,6 +115,23 @@ const header = toCookieHeader(cookies, { dedupeByName: true });
 `getCookies()` returns browser-compatible cookie objects with source metadata. `toCookieHeader()`
 sorts valid name/value pairs and can retain the first value for each name.
 
+### Set the library scope before reading
+
+- `url` is required and includes a protocol. Set the target URL before selecting any source.
+- `origins` adds extra origins; omit it when the target alone is enough. Add only origins approved for
+  the same handoff.
+- `names` limits the result to a nonempty allowlist. Omitted names, `[]`, and lists containing only
+  empty or whitespace entries mean no name filter. Reject or short-circuit an empty computed allowlist
+  before calling `getCookies()` if your task requires specific names.
+- `browsers` selects the browser-provider order, not inline handoffs. Inline JSON, base64, and file
+  sources are tried first; the first inline source returning cookies ends the read. Without a browser
+  override, the default is Chrome, Safari, then Firefox, configurable through the environment.
+- `includeExpired` defaults to `false` for browser providers. It does not filter expiry in inline
+  JSON, base64, or file handoffs, even when explicitly `false`; check expiry in the caller before using
+  those cookies. Include expired browser cookies only when your task requires them.
+
+See the [usage reference](docs/usage.md) for profile selection, merge behavior, and environment overrides. A returned cookie is a credential, not permission to use it against an unrelated service.
+
 ## Use the Chrome exporter when a local read cannot cross the browser boundary
 
 The Manifest V3 extension in [`apps/extension`](apps/extension) reads only the current Chrome
